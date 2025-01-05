@@ -97,8 +97,58 @@ namespace BZ_ODF_JSON
             for (int i = 0; i < lines.Length; i++)
             {
                 string line = lines[i];
+                
+                if (string.IsNullOrWhiteSpace(line))
+                {
+                    continue;
+                }
 
-                if (string.IsNullOrWhiteSpace(line) || line.StartsWith(';') || line.StartsWith("//"))
+                string lowerCaseLine = line.ToLower();
+                string[] prefixes =
+                [
+                    "light",
+                    "effect",
+                    "anim",
+                    "render",
+                    "ainame",
+                    "geometry",
+                    "texture",
+                    "start",
+                    "end",
+                    "sound",
+                    "finish",
+                    "emit",
+                    "clear",
+                    "damage",
+                    "lod",
+                    "terrain",
+                    "info",
+                    "collision",
+                    "always",
+                    "ambeintsound",
+                    "justflat",
+                    "detect",
+                    "trail",
+                    "rotationrate",
+                    "maxdist",
+                    "maxradii",
+                    "posroll",
+                    "simulatebase",
+                    "lifetime",
+                    "tunnel",
+                    "staywith",
+                    "runanim",
+                    "panel",
+                    "cockpit",
+                    "usecollision"
+                ];
+
+                // Check if the line starts with key words and don't bother processing them.
+                if (prefixes.Any(prefix => lowerCaseLine.StartsWith(prefix)))
+                {
+                    continue;
+                }
+                else if (line.StartsWith(';') || line.StartsWith("//"))
                 {
                     addComment(line);
                 }

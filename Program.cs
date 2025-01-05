@@ -61,7 +61,7 @@ namespace BZ_ODF_JSON
                     List<Dictionary<string, string>> odfFiles =
                     [
                         .. stockODFFiles.Where(s => inclusions.Any(prefix => s.First().Key.StartsWith(prefix))).ToList(),
-                        .. vsrODFFiles.Where(s => inclusions.Any(prefix => s.First().Key.StartsWith(prefix))).ToList(),
+                        .. vsrODFFiles.Where(s => inclusions.Any(prefix => s.First().Key.StartsWith(prefix) && !s.First().Key.Contains("_config"))).ToList(),
                     ];
 
                     if (odfFiles == null || odfFiles.Count <= 0)
