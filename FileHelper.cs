@@ -55,7 +55,7 @@ namespace BZ_ODF_JSON
             }
         }
 
-        public static string GetIniAsJson(string fileName, string value, bool preserveComments, bool isLastFile)
+        public static string GetIniAsJson(string fileName, string value, bool preserveComments, bool isLastFile, bool usePrefixFilter)
         {
             StringBuilder json = new();
             string[] lines = value.Split(["\r\n", "\n"], StringSplitOptions.None).Select(line => line.Trim()).ToArray();
@@ -92,7 +92,7 @@ namespace BZ_ODF_JSON
                 return line;
             }
 
-            json.Append($"\"{fileName.JavaScriptEncode()}\":{{");
+            json.Append($"\"{fileName.JavaScriptEncode().ToLower()}\":{{");
 
             for (int i = 0; i < lines.Length; i++)
             {
@@ -119,7 +119,6 @@ namespace BZ_ODF_JSON
                     "finish",
                     "emit",
                     "clear",
-                    "damage",
                     "lod",
                     "terrain",
                     "info",
@@ -144,11 +143,11 @@ namespace BZ_ODF_JSON
                 ];
 
                 // Check if the line starts with key words and don't bother processing them.
-                if (prefixes.Any(prefix => lowerCaseLine.StartsWith(prefix)))
+                if (usePrefixFilter && prefixes.Any(prefix => lowerCaseLine.StartsWith(prefix)))
                 {
                     continue;
                 }
-                else if (line.StartsWith(';') || line.StartsWith("//"))
+                else if (line.StartsWith(';') || line.StartsWith("//") || line.StartsWith("/"))
                 {
                     addComment(line);
                 }
